@@ -78,8 +78,9 @@ class SearchFragment:Fragment() {
                 when (actionId) {
                     EditorInfo.IME_ACTION_SEARCH -> {
                         navigateToSearchResult(textView.text.toString())
-
+                        textView.text =""
                         true
+
                     }
 
                     EditorInfo.IME_ACTION_DONE -> {
@@ -160,6 +161,7 @@ class SearchFragment:Fragment() {
     private fun navigateToSearchResult(searchText: String) {
     NavHostFragment.findNavController(this)
         .navigate(SearchFragmentDirections.actionSearchFragmentToSearchResult(searchText))
+
 }
 
 

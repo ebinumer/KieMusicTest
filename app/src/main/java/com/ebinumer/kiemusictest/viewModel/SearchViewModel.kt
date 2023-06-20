@@ -1,10 +1,12 @@
 package com.ebinumer.kiemusictest.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.ebinumer.kiemusictest.data.model.GenreAllResponse
 import com.ebinumer.kiemusictest.data.model.Recordings
 import com.ebinumer.kiemusictest.data.model.SearchResponse
 import com.ebinumer.kiemusictest.data.repo.Repository
@@ -27,6 +29,9 @@ class SearchViewModel(private val mRepoHome: Repository) : ViewModel() {
     private val _historyDeleteStatus = MutableLiveData<Boolean>()
     val historyDeleteStatus: LiveData<Boolean>
         get() = _historyDeleteStatus
+
+    private val _allGenreResponse: MutableLiveData<NetworkResult<GenreAllResponse>> = MutableLiveData()
+    val allGenreResponse: LiveData<NetworkResult<GenreAllResponse>> = _allGenreResponse
 
 
     suspend fun getSearchResponse(searchString: String): Flow<PagingData<Recordings>> {
@@ -56,9 +61,17 @@ class SearchViewModel(private val mRepoHome: Repository) : ViewModel() {
             }
         }
     }
+    private fun fetchAllGenreResponse() = viewModelScope.launch {
+        Log.e("viewmode","call")
+        mRepoHome.getAllGenre().collect { values ->
+            _allGenreResponse.value = values
+        }
+    }
+
 
 
     init {
         getSearchHistory()
+        fetchAllGenreResponse()
     }
 }

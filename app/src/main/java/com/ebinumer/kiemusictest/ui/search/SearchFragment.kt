@@ -11,8 +11,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import com.ebinumer.kiemusictest.R
+import com.ebinumer.kiemusictest.data.model.Genres
+import com.ebinumer.kiemusictest.data.model.Recordings
+import com.ebinumer.kiemusictest.data.repo.base.NetworkResult
 import com.ebinumer.kiemusictest.data.roomDb.SearchItem
 import com.ebinumer.kiemusictest.databinding.SearchFragmentBinding
+import com.ebinumer.kiemusictest.ui.home.adapter.GenreAdapter
 import com.ebinumer.kiemusictest.ui.search.adapter.SearchHistoryAdapter
 import com.ebinumer.kiemusictest.utils.gone
 import com.ebinumer.kiemusictest.utils.show
@@ -25,6 +29,8 @@ class SearchFragment:Fragment() {
     lateinit var mBinding:SearchFragmentBinding
     lateinit var searchHistoryAdapter: SearchHistoryAdapter
     private var searchItems: ArrayList<SearchItem> = arrayListOf()
+    var genres: ArrayList<Genres> = arrayListOf()
+    lateinit var grnItemsAdapter: GenreAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +47,7 @@ class SearchFragment:Fragment() {
         initUi()
         dataObserver()
         setSearchHistory()
+        initGenre()
     }
 
 
@@ -55,7 +62,14 @@ class SearchFragment:Fragment() {
             }
         }
     }
+    private fun initGenre() {
+        grnItemsAdapter = GenreAdapter(genres) { data: Genres, position: Int ->
 
+        }
+        mBinding.rcPopularGen.apply {
+            adapter = grnItemsAdapter
+        }
+    }
 
     private fun initUi() {
 
@@ -110,12 +124,34 @@ class SearchFragment:Fragment() {
                 }
 
             }
+
             historyDeleteStatus.observe(viewLifecycleOwner) { success ->
                 if (success) {
                     searchHistoryAdapter.notifyDataSetChanged()
                     showToast("Data deleted successfully")
                 } else {
                     showToast("Failed to delete data")
+                }
+            }
+
+            allGenreResponse.observe(viewLifecycleOwner) { response ->
+                when (response) {
+                    is NetworkResult.Success -> {
+                        response.data?.genres?.let {
+                            genres.addAll(it)
+                            grnItemsAdapter.notifyItemInserted(0)
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        showToast("Network Error")
+                    }
+
+                    is NetworkResult.Loading -> {
+                    }
+
+                    else -> {
+                        showToast("Something went wrong")
+                    }
                 }
             }
         }

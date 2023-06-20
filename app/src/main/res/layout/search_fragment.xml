@@ -87,7 +87,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rc_search_history"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="250dp"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -115,7 +115,7 @@
                     android:id="@+id/txt_songs_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="20dp"
                     android:text="@string/popular_genres"
                     android:textColor="@color/white"
                     android:textSize="20sp"
@@ -124,7 +124,7 @@
                     app:layout_constraintTop_toBottomOf="@id/rc_search_history" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rc_popular_songs"
+                    android:id="@+id/rc_popular_gen"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -133,6 +133,7 @@
                     app:layout_constraintEnd_toEndOf="@id/ic_user"
                     app:layout_constraintStart_toStartOf="@id/edt_search"
                     app:layout_constraintTop_toBottomOf="@id/txt_songs_title"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:spanCount="2"
                     tools:itemCount="4"
                     tools:listitem="@layout/popular_genre_item" />

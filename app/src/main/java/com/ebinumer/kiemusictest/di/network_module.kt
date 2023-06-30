@@ -14,12 +14,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import android.content.Context
+import com.ebinumer.kiemusictest.utils.BaseUrlInterceptor
 
 
-const val BASE_URL = "https://musicbrainz.org/ws/"
-const val userAgent = "KieMusic/1.0.0 (https://www.example.com)"
-
+const val BASE_URL = "https://api.spotify.com/"
+//const val BASE_URL = "https://api.spotify.com/"
+//const val BASE_URL = "https://"
 lateinit var cache: Cache
+val baseUrlInterceptor = BaseUrlInterceptor("https://api.spotify.com/")
 
 
 
@@ -38,27 +40,26 @@ val mNetworkModule = module {
 }
 
 
+
 fun createHttpClient(): OkHttpClient {
-
-
 
     val client = OkHttpClient.Builder().apply {
         readTimeout(8 * 60, TimeUnit.SECONDS)
         cache(cache )
         addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        addInterceptor(baseUrlInterceptor)
         addInterceptor { chain ->
             val originalRequest = chain.request()
             val requestWithUserAgent = originalRequest.newBuilder()
-                .header("User-Agent", userAgent)
                 .build()
             chain.proceed(requestWithUserAgent)
+
         }
             .build()
     }
 
 
     return client.addInterceptor(
-
 //        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)
         ServiceInterCeptor()
     ).build()

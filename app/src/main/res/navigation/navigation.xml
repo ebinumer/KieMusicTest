@@ -2,8 +2,22 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/homeFragment"
+    app:startDestination="@id/splashPage"
     android:id="@+id/navigation">
+
+    <fragment
+        android:id="@+id/splashPage"
+        android:name="com.ebinumer.kiemusictest.ui.splash.SplashPage"
+       android:label="splash"
+        tools:layout="@layout/splash_page"
+        >
+
+        <action
+            android:id="@+id/action_splashPage_to_homeFragment"
+            app:popUpTo="@id/navigation"
+            app:popUpToInclusive="true"
+            app:destination="@id/homeFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/homeFragment"

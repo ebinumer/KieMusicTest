@@ -63,6 +63,9 @@ dependencies {
     //DI - Koin
     implementation "io.insert-koin:koin-android:3.4.2"
 
+    //spotify
+    implementation 'com.spotify.android:auth:1.2.4'
+
     //Retrofit (Network layer)
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
@@ -92,9 +95,6 @@ dependencies {
 //    kapt "androidx.lifecycle:lifecycle-compiler:2.6.1"
 
 
-    //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 
     //paging3
     implementation 'androidx.paging:paging-runtime-ktx:3.1.1'

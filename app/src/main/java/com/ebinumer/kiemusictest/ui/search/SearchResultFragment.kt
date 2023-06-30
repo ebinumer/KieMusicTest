@@ -46,11 +46,13 @@ class SearchResultFragment:Fragment() {
     }
 
     private fun initSearchData() {
-        searchingAdapter = SearchAdapter { data: Recordings, position: Int ->
+        searchingAdapter = SearchAdapter( { data: Recordings, position: Int ->
             showToast("Clicked on ${data.title}")
 
             searchResultViewModel.addToHistory(SearchItem(title = data.title.toString(), itemId = data.id, type = "Song"))
-        }
+        },{data, position ->
+            searchResultViewModel.fetchSong(data.id.toString())
+        })
         mBinding.rcSearchResult.apply {
             adapter = searchingAdapter
         }

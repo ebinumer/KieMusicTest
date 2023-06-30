@@ -1,5 +1,6 @@
 package com.ebinumer.kiemusictest.viewModel
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,11 +15,14 @@ import com.ebinumer.kiemusictest.data.repo.base.NetworkResult
 import com.ebinumer.kiemusictest.data.roomDb.SearchItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
-class SearchViewModel(private val mRepoHome: Repository) : ViewModel() {
+class SearchViewModel(
+    private val mRepoHome: Repository
+) : ViewModel() {
 
     private val _searchResponse: MutableLiveData<NetworkResult<SearchResponse>> = MutableLiveData()
     val searchResponse: LiveData<NetworkResult<SearchResponse>> = _searchResponse
@@ -30,7 +34,8 @@ class SearchViewModel(private val mRepoHome: Repository) : ViewModel() {
     val historyDeleteStatus: LiveData<Boolean>
         get() = _historyDeleteStatus
 
-    private val _allGenreResponse: MutableLiveData<NetworkResult<GenreAllResponse>> = MutableLiveData()
+    private val _allGenreResponse: MutableLiveData<NetworkResult<GenreAllResponse>> =
+        MutableLiveData()
     val allGenreResponse: LiveData<NetworkResult<GenreAllResponse>> = _allGenreResponse
 
 
@@ -61,13 +66,19 @@ class SearchViewModel(private val mRepoHome: Repository) : ViewModel() {
             }
         }
     }
+
     private fun fetchAllGenreResponse() = viewModelScope.launch {
-        Log.e("viewmode","call")
+        Log.e("viewmode", "call")
         mRepoHome.getAllGenre().collect { values ->
             _allGenreResponse.value = values
         }
     }
 
+     fun fetchSong(recordingId:String) = viewModelScope.launch {
+        mRepoHome.getSong(recordingId).collect{ value ->
+            Log.e(TAG, "fetchSong: ${value}", )
+        }
+    }
 
 
     init {

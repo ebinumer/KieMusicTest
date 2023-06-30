@@ -5,13 +5,16 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.ebinumer.kiemusictest.data.api.MusicApi
 import com.ebinumer.kiemusictest.data.model.GenreAllResponse
+import com.ebinumer.kiemusictest.data.model.RecordingDetails
 import com.ebinumer.kiemusictest.data.model.Recordings
 import com.ebinumer.kiemusictest.data.model.SearchResponse
+import com.ebinumer.kiemusictest.data.model.TracksResponse
 import com.ebinumer.kiemusictest.data.repo.base.BaseApiResponse
 import com.ebinumer.kiemusictest.data.repo.base.NetworkResult
 import com.ebinumer.kiemusictest.data.roomDb.SearchDao
 import com.ebinumer.kiemusictest.data.roomDb.SearchItem
 import com.ebinumer.kiemusictest.data.pagingSource.SearchPagingSource
+import com.ebinumer.kiemusictest.di.baseUrlInterceptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -22,13 +25,23 @@ class Repository(
     private val searchDao: SearchDao,
 ): BaseApiResponse() {
 
+    suspend fun getPopularSongs(country: String, limit: Int): Flow<NetworkResult<TracksResponse>> {
+        baseUrlInterceptor.setBaseUrl("https://api.spotify.com")
+        return flow<NetworkResult<TracksResponse>> {
+            mApi.getPopularSongs(country, limit)
+
+        }.flowOn(Dispatchers.IO)
+    }
+
     suspend fun getAllGenre():Flow<NetworkResult<GenreAllResponse>> {
+        baseUrlInterceptor.setBaseUrl("https://api.spotify.com/")
         return flow {
             emit(safeApiCall { mApi.getAllGenre() })
         }.flowOn(Dispatchers.IO)
     }
 
     suspend fun getRecording(query:String):Flow<NetworkResult<SearchResponse>> {
+        baseUrlInterceptor.setBaseUrl("https://api.spotify.com")
         return flow {
             emit(safeApiCall { mApi.searchRecordings(query) })
         }.flowOn(Dispatchers.IO)
@@ -57,5 +70,11 @@ class Repository(
             false
         }
 
+    }
+
+    suspend fun getSong(recordingId:String):Flow<NetworkResult<RecordingDetails>>{
+        return flow {
+            emit(safeApiCall { mApi.getSong(recordingId) })
+        }.flowOn(Dispatchers.IO)
     }
 }

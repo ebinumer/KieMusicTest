@@ -7,6 +7,7 @@ import com.ebinumer.kiemusictest.di.mNetworkModule
 import com.ebinumer.kiemusictest.di.mViewModel
 import com.ebinumer.kiemusictest.di.pagingSource
 import com.ebinumer.kiemusictest.di.repoModule
+import com.ebinumer.kiemusictest.di.session_module
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -22,7 +23,7 @@ class MusicApp : MultiDexApplication() {
             androidContext(this@MusicApp)
             modules(
                 listOf(
-                    mNetworkModule,
+                    mNetworkModule,session_module,
                     repoModule, mViewModel,pagingSource,dbModule
                 )
             )

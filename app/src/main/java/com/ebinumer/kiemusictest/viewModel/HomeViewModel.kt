@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ebinumer.kiemusictest.data.model.GenreAllResponse
 import com.ebinumer.kiemusictest.data.model.SearchResponse
+import com.ebinumer.kiemusictest.data.model.TracksResponse
 import com.ebinumer.kiemusictest.data.repo.Repository
 import com.ebinumer.kiemusictest.data.repo.base.NetworkResult
 import kotlinx.coroutines.launch
@@ -20,6 +21,9 @@ class HomeViewModel(
 
     private val _allRecordingResponse: MutableLiveData<NetworkResult<SearchResponse>> = MutableLiveData()
     val allRecordingResponse: LiveData<NetworkResult<SearchResponse>> = _allRecordingResponse
+
+    private val _popularSongs = MutableLiveData<NetworkResult<TracksResponse>>()
+    val popularSongs: LiveData<NetworkResult<TracksResponse>> = _popularSongs
 
 
     private fun fetchAllGenreResponse() = viewModelScope.launch {
@@ -35,11 +39,23 @@ class HomeViewModel(
             _allRecordingResponse.value = values
         }
     }
+    fun getPopularSongs(country: String, limit: Int) {
+        viewModelScope.launch {
+            try {
+                mRepoHome.getPopularSongs(country, limit).collect{
+                    _popularSongs.value = it
+                }
 
+            } catch (e: Exception) {
+
+            }
+        }
+    }
 
     init {
-        fetchAllGenreResponse()
-        fetchPopularResponse()
+//        fetchAllGenreResponse()
+//        fetchPopularResponse()
+        getPopularSongs("US", 10)
     }
 
 }

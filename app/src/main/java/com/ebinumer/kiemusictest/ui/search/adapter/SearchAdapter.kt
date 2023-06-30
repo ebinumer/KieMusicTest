@@ -10,7 +10,8 @@ import com.ebinumer.kiemusictest.databinding.SearchItemBinding
 
 
 class SearchAdapter(
-    private val onItemClicked: (data: Recordings, position: Int) -> Unit
+    private val onItemClicked: (data: Recordings, position: Int) -> Unit,
+    private val onPlayClicked: (data: Recordings, position: Int) -> Unit,
 ) : PagingDataAdapter<Recordings, SearchAdapter.MyViewHolder>(SearchComparator) {
 
 
@@ -27,7 +28,7 @@ class SearchAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
       getItem(position)?.let {
-            holder.bind(it, position, onItemClicked)
+            holder.bind(it, position, onItemClicked,onPlayClicked)
         }
     }
 
@@ -37,12 +38,16 @@ class SearchAdapter(
         fun bind(
             data: Recordings,
             position: Int,
-            onItemDltClicked: (data: Recordings, position: Int) -> Unit
+            onItemClicked: (data: Recordings, position: Int) -> Unit,
+            onPlayClicked: (data: Recordings, position: Int) -> Unit,
         ) {
             binding.apply {
                 itemData = data
                 itemCard.setOnClickListener {
-                    onItemDltClicked(data, position)
+                    onItemClicked(data, position)
+                }
+                btnPlay.setOnClickListener {
+                    onPlayClicked(data,position)
                 }
 
             }

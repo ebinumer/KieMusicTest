@@ -7,7 +7,8 @@
         <variable
             name="itemData"
             type="com.ebinumer.kiemusictest.data.model.Recordings" />
-    </data>
+
+         </data>
 
 
 <androidx.cardview.widget.CardView
@@ -129,7 +130,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
